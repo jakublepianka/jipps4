@@ -1,11 +1,36 @@
-﻿@model List<GymShop.Models.Product> 
+﻿@model IEnumerable<GymShop.Models.Product>
 
 @{
-    ViewData["Title"] = "Store";
+    ViewData["Title"] = "Product";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Products</h1>
-    @* <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p> *@
-</div>
+<h1>Products</h1>
 
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Available quantity</th>
+            <th>Price</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.ProductName</td>
+                <td>@product.ProductQuantity</td>
+                <td>@product.ProductPrice.ToString("C")</td>
+                <td>
+                    <form asp-action="AddToCart" asp-controller="Cart" method="post">
+                        <input type="hidden" name="productId" value="@product.ProductID" />
+                        <button type="submit" class="btn btn-primary btn-sm">Add to Cart</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Cart" asp-controller="Cart" class="btn btn-success">View Cart</a>
