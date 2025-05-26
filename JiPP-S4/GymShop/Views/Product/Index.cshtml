@@ -1,7 +1,14 @@
 ﻿@model IEnumerable<GymShop.Models.Product>
 
 @{
-    ViewData["Title"] = "Product";
+    ViewData["Title"] = "Products";
+}
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info">
+        @TempData["Message"]
+    </div>
 }
 
 <h1>Products</h1>

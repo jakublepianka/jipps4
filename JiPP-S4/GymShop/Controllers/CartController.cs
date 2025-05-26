@@ -63,16 +63,29 @@ namespace GymShop.Controllers
             public IActionResult AddToCart(int productId)
             {
                 var product = _productManager.GetAllProducts().FirstOrDefault(p => p.ProductID == productId);
-                if (product != null)
+
+            if (product != null)
+            {
+                var cart = GetCart();
+                var CartItem = cart.Items.FirstOrDefault(i => i.Product?.ProductID == productId);
+                int currentQuantity = CartItem?.ProductQuantity ?? 0;
+                if (currentQuantity >= product.ProductQuantity)
                 {
-                    var cart = GetCart();
+                    TempData["Message"] = "Not enough items in stock to fulfill your request";
+                    return RedirectToAction("Index", "Product");
+                }
+                else
+                {
                     cart.AddProduct(product);
                     SaveCart(cart);
+                    return RedirectToAction("Index", "Product");
                 }
-                return NoContent();
-            }
+                }
+                return RedirectToAction("Index", "Product");
 
-            [HttpPost]
+        }
+
+        [HttpPost]
             public IActionResult RemoveFromCart(int productId)
             {
                 var cart = GetCart();
